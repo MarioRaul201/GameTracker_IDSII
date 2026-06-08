@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gametracker.ui.login.viewmodel.LoginResult
 import com.example.gametracker.ui.login.viewmodel.LoginViewModel
 
 @Composable
@@ -40,6 +41,7 @@ fun LoginView(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -48,14 +50,11 @@ fun LoginView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
-
         Text(
             text = "GameTracker",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold
         )
-
         Text(
             text = "Tu progreso, tus juegos, tus amigos.",
             style = MaterialTheme.typography.bodyMedium,
@@ -66,7 +65,10 @@ fun LoginView(
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+                errorMessage = ""
+            },
             label = { Text("Correo electrónico") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email
@@ -79,7 +81,10 @@ fun LoginView(
 
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it
+                errorMessage = ""
+            },
             label = { Text("Contraseña") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Password
@@ -95,10 +100,25 @@ fun LoginView(
             modifier = Modifier.fillMaxWidth()
         )
 
+        if (errorMessage.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = onLoginClick,
+            onClick = {
+                val result = loginViewModel.login(email, password)
+                when (result) {
+                    is LoginResult.Success -> onLoginClick()
+                    is LoginResult.Error -> errorMessage = result.message
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Iniciar sesión")

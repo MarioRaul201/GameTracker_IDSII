@@ -1,5 +1,6 @@
 package com.example.gametracker.ui.login.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -46,6 +48,7 @@ fun LoginView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.Black)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -53,7 +56,8 @@ fun LoginView(
         Text(
             text = "GameTracker",
             style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = Color.White
         )
         Text(
             text = "Tu progreso, tus juegos, tus amigos.",
